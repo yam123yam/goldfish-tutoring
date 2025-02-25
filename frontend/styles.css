@@ -1,0 +1,206 @@
+/* ==================== GENERAL STYLES ==================== */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff; /* Light blue background */
+    text-align: center;
+}
+
+
+/* ==================== CONTAINERS ==================== */
+.container{
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar_container {
+    width: 90%;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+    max-width: 90%;
+    position: absolute; /* Centering */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* ==================== HEADINGS & TEXT ==================== */
+h1 {
+    color: #39abf7; /* Blue Title */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* ==================== LABELS & INPUTS ==================== */
+label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #555; /* Medium-dark gray */
+    display: block;
+    margin-bottom: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    outline: none;
+    margin-bottom: 20px;
+}
+
+/* Removes the border on focus 
+input:focus, select:focus {
+    border-color: transparent;
+}*/
+
+/* ==================== BUTTON STYLES ==================== */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    margin: 15px 10px;
+    color: white;
+    background: #54b4da;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.btn:hover {
+    background: linear-gradient(45deg, #0056b3, #0099cc);
+}
+
+/* Login Button */
+.link {
+    color: #4dbbed; 
+    text-decoration: none; /* Ensures no underline by default */
+}
+
+.link:hover {
+    text-decoration: underline; /* Adds underline on hover */}
+
+/* Login Button */
+.login-btn {
+    background-color: #48ca52; /* Green */
+}
+
+.login-btn:hover {
+    background: linear-gradient(45deg, #2e8c19, #138f46);
+}
+
+/* Home Button */
+.home-btn {
+    background-color: #f85e17; /* Orange */
+}
+
+.home-btn:hover {
+    background: linear-gradient(45deg, #e04d36, #e32528);
+}
+
+/* Center the register button */
+#register_user {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* ==================== FORM STYLES ==================== */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: none; /* No border */
+}
+
+.form label {
+    text-align: left;
+    padding-left: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ==================== ERROR MESSAGE ==================== */
+.error_message {
+    color: rgb(255, 0, 0);
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* ==================== LOGO ==================== */
+.logo-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.logo {
+    width: 200px;
+    height: auto;
+}
+
+/* ==================== CALENDAR STYLES ==================== */
+#calendar {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: white;
+    min-height: 500px; /* Ensures visibility */
+    color: #333;
+}
+
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 480px) {
+    .login-container {
+        width: 80%;
+        padding: 20px;
+    }
+
+    .login-container h2 {
+        font-size: 24px;
+    }
+}

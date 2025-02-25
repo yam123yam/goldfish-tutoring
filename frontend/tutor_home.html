@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor Home</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- FullCalendar -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+
+    <!-- Custom JS -->
+    <script src="scripts.js" defer></script>
+    
+</head>
+<body>
+    <div class="logo-container" onclick="redirect_to_home()">
+        <img src="logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="calendar_container">
+        <h1 id="welcome-message">Set Availability for User</h1> <!-- Dynamic Username Here -->
+        
+        <label for="subject">Choose Subject:</label>
+        <select id="subject" name="subject">
+            <option value="math">Math</option>
+            <option value="science">Science</option>
+            <option value="english">English</option>
+        </select>
+
+        <!-- Calendar -->
+        <div id="calendar"></div>
+
+        <button id="save_availability" class="btn">Save Availability</button>
+        <p id="availability_status" class="error_message">Status</p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let username = localStorage.getItem("username"); // Get stored username
+
+            if (!username) {
+                alert("You are not logged in!");
+                window.location.href = "login.html"; // Redirect to login page
+            } else {
+                document.getElementById("welcome-message").textContent = "Set Availability for " + username; 
+            }
+        });
+    </script>
+
+</body>
+</html>
