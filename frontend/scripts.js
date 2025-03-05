@@ -3,6 +3,8 @@ var API_REGISTER_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.
 var API_LOGIN_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/users/login";
 var API_AVAILABILITY_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/update/availability";
 var API_GET_ROLE_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/users/role";
+var API_GET_TUTORS_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/session/get_tutors"
+
 
 // Register user post request
 function register_post_request() {
@@ -251,6 +253,247 @@ document.addEventListener('DOMContentLoaded', function() {
     const displayAvailabilityData = () => {
         availabilityData.textContent = JSON.stringify(availability, null, 2);
     };
+});
+
+//scheduling a session 
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the elements
+    const scheduleButton = document.getElementById('schedule_sess_btn');
+    const subjectSelect = document.getElementById('subject');
+    const dateInput = document.getElementById('date');
+    const timeInput = document.getElementById('time');
+    const statusElement = document.getElementById('session_status');
+    const dataElement = document.getElementById('sesh_data');
+
+    // Add click event listener to the schedule button
+    scheduleButton.addEventListener('click', scheduleSession);
+
+    // Function to schedule a session
+    function scheduleSession() {
+        // Clear previous messages
+        statusElement.textContent = '';
+        dataElement.innerHTML = '';
+
+        // Validate inputs
+        if (!subjectSelect.value || !dateInput.value || !timeInput.value) {
+            statusElement.textContent = 'Please fill in all fields.';
+            return;
+        }
+    
+        // Show loading message
+        statusElement.textContent = 'Searching for available tutors...';
+
+        // Prepare data for the API call
+        const sessionData = {
+            subject: subjectSelect.value,
+            date: dateInput.value,
+            time: timeInput.value
+        };
+
+        // Make the API call to AWS Lambda
+        $.ajax({
+            url: API_GET_TUTORS_ENDPOINT,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(sessionData),
+            success: function(response) {
+                handleScheduleResponse(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                let errorMsg = 'An error occurred while scheduling the session.';
+                
+                // Try to parse the error response for more details
+                try {
+                    const errorResponse = JSON.parse(xhr.responseText);
+                    if (errorResponse.error) {
+                        errorMsg = errorResponse.error;
+                    }
+                } catch (e) {
+                    // If parsing fails, use the default error message
+                }
+                
+                statusElement.textContent = errorMsg;
+            }
+        });
+    }
+
+    // Function to handle the API response
+    function handleScheduleResponse(response) {
+        // Clear the status message
+        statusElement.textContent = '';
+
+        // Check if response contains a status code (API Gateway format)
+        if (response.statusCode) {
+            const responseBody = JSON.parse(response.body);
+            
+            if (response.statusCode === 200) {
+                displayTutors(responseBody.tutors);
+            } else {
+                statusElement.textContent = responseBody.error || 'No tutors available for the selected criteria.';
+            }
+        } 
+        // Direct lambda function response format
+        else if (response.status === 'success') {
+            displayTutors(response.tutors);
+        } else {
+            statusElement.textContent = response.message || 'No tutors available for the selected criteria.';
+        }
+    }
+
+    // Function to display the list of tutors
+    function displayTutors(tutors) {
+        if (!tutors || tutors.length === 0) {
+            statusElement.textContent = 'No tutors available for the selected criteria.';
+            return;
+        }
+
+        // Create a header for the data section
+        const header = document.createElement('h3');
+        header.textContent = 'Available Tutors:';
+        dataElement.appendChild(header);
+
+        // Create a table for the tutors
+        const table = document.createElement('table');
+        table.classList.add('tutor-table');
+        
+        // Add table header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        ['Name', 'Email', 'Phone', 'Subjects', 'Select'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        
+        // Add table body with tutor data
+        const tbody = document.createElement('tbody');
+        tutors.forEach(tutor => {
+            const row = document.createElement('tr');
+            
+            // Add tutor information
+            addTableCell(row, tutor.username);
+            addTableCell(row, tutor.email);
+            addTableCell(row, tutor.phone_number || 'N/A');
+            addTableCell(row, Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : tutor.subjects);
+            
+            // Add selection button
+            const selectCell = document.createElement('td');
+            const selectButton = document.createElement('button');
+            selectButton.textContent = 'Select';
+            selectButton.classList.add('select-btn');
+            selectButton.dataset.username = tutor.username;
+            selectButton.addEventListener('click', function() {
+                selectTutor(tutor);
+            });
+            selectCell.appendChild(selectButton);
+            row.appendChild(selectCell);
+            
+            tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+        dataElement.appendChild(table);
+
+        // Display available tutors in the status element
+        statusElement.textContent = `Available Tutors: ${tutors.map(tutor => tutor.username).join(', ')}`;
+    }
+
+    // Helper function to add a cell to a table row
+    function addTableCell(row, text) {
+        const cell = document.createElement('td');
+        cell.textContent = text || 'N/A';
+        row.appendChild(cell);
+    }
+
+    // Function to handle tutor selection
+    function selectTutor(tutor) {
+        // Clear previous content
+        dataElement.innerHTML = '';
+        
+        // Create confirmation message
+        const confirmation = document.createElement('div');
+        confirmation.classList.add('confirmation');
+        
+        const message = document.createElement('p');
+        message.textContent = `You've selected ${tutor.username} for a ${subjectSelect.value} session on ${formatDate(dateInput.value)} at ${formatTimeForDisplay(timeInput.value)}.`;
+        confirmation.appendChild(message);
+        
+        // Create confirm button
+        const confirmButton = document.createElement('button');
+        confirmButton.textContent = 'Confirm Booking';
+        confirmButton.classList.add('btn');
+        confirmButton.addEventListener('click', function() {
+            confirmBooking(tutor);
+        });
+        confirmation.appendChild(confirmButton);
+        
+        // Create back button
+        const backButton = document.createElement('button');
+        backButton.textContent = 'Back to Tutor List';
+        backButton.classList.add('btn', 'secondary');
+        backButton.addEventListener('click', function() {
+            scheduleSession(); // This will re-fetch the tutor list
+        });
+        confirmation.appendChild(backButton);
+        
+        dataElement.appendChild(confirmation);
+    }
+
+    // Function to confirm booking
+    function confirmBooking(tutor) {
+        // Here you would call another API to save the booking
+        // For now, we'll just show a success message
+        dataElement.innerHTML = '';
+        
+        const success = document.createElement('div');
+        success.classList.add('success-message');
+        
+        const message = document.createElement('p');
+        message.textContent = `Your session with ${tutor.username} has been booked successfully! You will receive a confirmation email shortly.`;
+        success.appendChild(message);
+        
+        dataElement.appendChild(success);
+        
+        // Reset the form after a short delay
+        setTimeout(function() {
+            subjectSelect.selectedIndex = 0;
+            dateInput.value = '';
+            timeInput.value = '';
+        }, 3000);
+    }
+
+    // Helper function to format time from HTML time input to API format
+    function formatTimeForAPI(timeStr) {
+        // Convert from 24-hour format to 12-hour format with AM/PM
+        if (!timeStr) return '';
+        
+        const [hours, minutes] = timeStr.split(':');
+        let hour = parseInt(hours, 10);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        
+        // Convert to 12-hour format
+        hour = hour % 12;
+        hour = hour ? hour : 12; // Convert 0 to 12
+        
+        return `${hour}:${minutes} ${ampm}`;
+    }
+
+    // Helper function to format time for display
+    function formatTimeForDisplay(timeStr) {
+        // Already in display format from the time input
+        return timeStr;
+    }
+
+    // Helper function to format date for display
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        
+        const date = new Date(dateStr);
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
 });
 
 // Navigation functions
