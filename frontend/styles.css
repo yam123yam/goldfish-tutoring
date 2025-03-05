@@ -1,0 +1,425 @@
+/* ==================== GENERAL STYLES ==================== */
+
+/* Basic reset and body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff; /* Light blue background */
+    text-align: center;
+}
+
+/* ==================== CONTAINERS ==================== */
+
+/* Container styles */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar_container {
+    width: 90%;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+    max-width: 90%;
+    position: absolute; /* Centering */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* ==================== HEADINGS & TEXT ==================== */
+
+/* Headings and paragraphs */
+h1 {
+    color: #39abf7; /* Blue Title */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* ==================== LABELS & INPUTS ==================== */
+
+/* Label and input styling */
+label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #555; /* Medium-dark gray */
+    display: block;
+    margin-bottom: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    outline: none;
+    margin-bottom: 20px;
+}
+
+/* ==================== BUTTON STYLES ==================== */
+
+/* Button styling */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    margin: 15px 10px;
+    color: white;
+    background: #54b4da;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.btn:hover {
+    background: linear-gradient(45deg, #0056b3, #0099cc);
+}
+
+/* Link styling */
+.link {
+    color: #4dbbed; 
+    text-decoration: none; /* Ensures no underline by default */
+}
+
+.link:hover {
+    text-decoration: underline; /* Adds underline on hover */
+}
+
+/* Specific button styles */
+.login-btn {
+    background-color: #48ca52; /* Green */
+}
+
+.login-btn:hover {
+    background: linear-gradient(45deg, #2e8c19, #138f46);
+}
+
+.home-btn {
+    background-color: #f85e17; /* Orange */
+}
+
+.home-btn:hover {
+    background: linear-gradient(45deg, #e04d36, #e32528);
+}
+
+/* Center the register button */
+#register_user {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* ==================== FORM STYLES ==================== */
+
+/* Form styling */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: none; /* No border */
+}
+
+.form label {
+    text-align: left;
+    padding-left: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ==================== ERROR MESSAGE ==================== */
+
+/* Error message styling */
+.error_message {
+    color: rgb(255, 0, 0);
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* ==================== LOGO ==================== */
+
+/* Logo styling */
+.logo-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.logo {
+    width: 200px;
+    height: auto;
+}
+
+/* ==================== CALENDAR STYLES ==================== */
+
+/* Calendar container styling */
+#calendar {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: white;
+    min-height: 500px; /* Ensures visibility */
+    color: #333;
+}
+
+/* Additional calendar styles */
+.wrapper {
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper header {
+    display: flex;
+    align-items: center;
+    padding: 25px 30px 10px;
+    justify-content: space-between;
+}
+
+header .icons {
+    display: flex;
+}
+
+header .icons span {
+    height: 38px;
+    width: 38px;
+    margin: 0 1px;
+    cursor: pointer;
+    color: #878787;
+    text-align: center;
+    line-height: 38px;
+    font-size: 1.9rem;
+    user-select: none;
+    border-radius: 50%;
+}
+
+.icons span:last-child {
+    margin-right: -10px;
+}
+
+header .icons span:hover {
+    background: #f8df90;
+}
+
+header .current-date {
+    font-size: 1.45rem;
+    font-weight: 500;
+}
+
+.calendar {
+    padding: 20px;
+}
+
+.calendar ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    text-align: center;
+}
+
+.calendar .days {
+    margin-bottom: 20px;
+}
+
+.calendar li {
+    color: #333;
+    width: calc(100% / 7);
+    font-size: 1.07rem;
+}
+
+.calendar .weeks li {
+    font-weight: 500;
+    cursor: default;
+}
+
+.calendar .days li {
+    z-index: 1;
+    cursor: pointer;
+    position: relative;
+    margin-top: 30px;
+}
+
+.days li.inactive {
+    color: #aaa;
+}
+
+.days li.active {
+    color: #fff;
+}
+
+.days li.selected {
+    background-color: #f8df90;
+}
+
+.days li.not-available {
+    color: red;
+}
+
+.days li.not-available::before {
+    background: red;
+}
+
+.days li::before {
+    position: absolute;
+    content: "";
+    left: 50%;
+    top: 50%;
+    height: 40px;
+    width: 40px;
+    z-index: -1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.days li.active::before {
+    background: #39abf7; /* Blue */
+}
+
+.days li:not(.active):hover::before {
+    background: #fecf4f;
+}
+
+.availability-form {
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+.availability-form h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #39abf7;
+}
+
+.availability-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.availability-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.availability-form input,
+.availability-form select {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #555;
+}
+
+.checkbox-group input {
+    margin-right: 10px;
+}
+
+.availability-form button {
+    padding: 10px;
+    font-size: 16px;
+    color: white;
+    background: #54b4da;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.availability-form button:hover {
+    background: linear-gradient(45deg, #0056b3, #0099cc);
+}
+
+#availabilityData {
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+@media (max-width: 480px) {
+    .login-container {
+        width: 80%;
+        padding: 20px;
+    }
+
+    .login-container h2 {
+        font-size: 24px;
+    }
+
+    .calendar {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .days {
+        grid-template-columns: repeat(7, 1fr);
+    }
+}

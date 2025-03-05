@@ -1,0 +1,59 @@
+<!-- Profile Page / Account Information -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+    <script src="scripts.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Register</h1>
+        
+        <label for="username" class="form">Username:</label>
+        <input type="text" id="username" name="username" required="">
+
+        <label for="password" class="form">Password:</label>
+        <input type="password" id="password" name="password" required="">
+
+        <label for="email" class="form">Email:</label>
+        <input type="email" id="email" name="email" required="">
+
+        <label for="phone_number" class="form">Phone Number:</label>
+        <input type="tel" id="phone_number" name="phone_number" required="">
+
+        <label for="pet_name" class="form">Pet's Name:</label>
+        <input type="text" id="pet_name" name="pet_name" required="">
+
+        <label for="role" class="form">Role:</label>
+        <select id="role" name="role">
+            <option value="tutor">Tutor</option>
+            <option value="student">stuent</option>
+        </select>
+
+        <label for="full_name" class="form">Full Name:</label>
+        <input type="text" id="full_name" name="full_name" required="">
+
+        <label for="grade" class="form">Grade:</label>
+        <input type="number" id="grade" name="grade" required="">
+
+        <br>
+        <br>
+        
+        <input type="submit" id="register_user" value="Register" class="btn">
+        
+        <p id="register_status" class="error_message">Status</p>
+
+        <a href="login.html" class="btn login-btn">Login</a>
+        <a href="home.html" class="btn home-btn">Go to Home</a>
+    </div>
+
+    <script>
+        register_post_request()
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule Session</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Schedule Session</h2>
+        <div>
+            <label for="subject">Subject:</label>
+            <select id="subject" name="subject" required>
+                <option value="math">Math</option>
+                <option value="science">Science</option>
+                <option value="history">History</option>
+                <option value="english">English</option>
+            </select>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required>
+            <button type="button" id="schedule_sess_btn" class="btn">Schedule Session</button>
+        </div>
+        <p id="session_status" class="error_message"></p>
+    </div>
+
+    <script src="scripts.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

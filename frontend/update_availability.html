@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Edit Availability | Dynamic Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font Link for Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <div class="logo-container" onclick="redirect_to_home()">
+        <img src="logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="container">
+        <div class="wrapper">
+            <header>
+                <p class="current-date"></p>
+                <div class="icons">
+                    <span id="prev" class="material-symbols-rounded">chevron_left</span>
+                    <span id="next" class="material-symbols-rounded">chevron_right</span>
+                </div>
+            </header>
+            <div class="calendar">
+                <ul class="weeks">
+                    <li>Sun</li>
+                    <li>Mon</li>
+                    <li>Tue</li>
+                    <li>Wed</li>
+                    <li>Thu</li>
+                    <li>Fri</li>
+                    <li>Sat</li>
+                </ul>
+                <ul class="days"></ul>
+            </div>
+        </div>
+
+        <div class="availability-form">
+            <h2>Edit Availability</h2>
+            <div>
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" name="startTime" required>
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" name="endTime" required>
+                <label for="subjects">Select Subject(s):</label>
+                <select id="subjects" name="subjects" multiple>
+                    <option value="math">Math</option>
+                    <option value="science">Science</option>
+                    <option value="history">History</option>
+                    <option value="english">English</option>
+                </select>
+            </div>
+            <input type="button" id="availability_submit" value="Set Availability" class="btn">
+        </div>
+
+        <p id="availability_status" class="error_message">Status</p>
+        
+        <a href="login.html" class="btn login-btn">Login</a>
+        <a href="home.html" class="btn home-btn">Go to Home</a>
+    </div>
+    
+</body>
+</html>      
