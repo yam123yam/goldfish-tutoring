@@ -632,7 +632,7 @@ function saveProfile() {
     })
     .then(data => {
         document.getElementById('profile_status').textContent = 'Profile updated successfully!';
-        window.location.href = "profile.html";
+        window.location.href = "profile_page.html";
     })
     .catch(error => {
         console.error('Error updating profile:', error);
