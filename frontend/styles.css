@@ -175,6 +175,15 @@ input, select {
     font-size: 14px;
 }
 
+/* Data message styling */
+.data_message {
+    color: #333;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    white-space: pre-wrap;
+}
+
 /* ==================== LOGO ==================== */
 
 /* Logo styling */
@@ -204,204 +213,6 @@ input, select {
     color: #333;
 }
 
-/* Additional calendar styles */
-.wrapper {
-    width: 100%;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.wrapper header {
-    display: flex;
-    align-items: center;
-    padding: 25px 30px 10px;
-    justify-content: space-between;
-}
-
-header .icons {
-    display: flex;
-}
-
-header .icons span {
-    height: 38px;
-    width: 38px;
-    margin: 0 1px;
-    cursor: pointer;
-    color: #878787;
-    text-align: center;
-    line-height: 38px;
-    font-size: 1.9rem;
-    user-select: none;
-    border-radius: 50%;
-}
-
-.icons span:last-child {
-    margin-right: -10px;
-}
-
-header .icons span:hover {
-    background: #f8df90;
-}
-
-header .current-date {
-    font-size: 1.45rem;
-    font-weight: 500;
-}
-
-.calendar {
-    padding: 20px;
-}
-
-.calendar ul {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    text-align: center;
-}
-
-.calendar .days {
-    margin-bottom: 20px;
-}
-
-.calendar li {
-    color: #333;
-    width: calc(100% / 7);
-    font-size: 1.07rem;
-}
-
-.calendar .weeks li {
-    font-weight: 500;
-    cursor: default;
-}
-
-.calendar .days li {
-    z-index: 1;
-    cursor: pointer;
-    position: relative;
-    margin-top: 30px;
-}
-
-.days li.inactive {
-    color: #aaa;
-}
-
-.days li.active {
-    color: #fff;
-}
-
-.days li.selected {
-    background-color: #f8df90;
-}
-
-.days li.not-available {
-    color: red;
-}
-
-.days li.not-available::before {
-    background: red;
-}
-
-.days li::before {
-    position: absolute;
-    content: "";
-    left: 50%;
-    top: 50%;
-    height: 40px;
-    width: 40px;
-    z-index: -1;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.days li.active::before {
-    background: #39abf7; /* Blue */
-}
-
-.days li:not(.active):hover::before {
-    background: #fecf4f;
-}
-
-.availability-form {
-    width: 100%;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-top: 20px;
-    box-sizing: border-box;
-}
-
-.availability-form h2 {
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    color: #39abf7;
-}
-
-.availability-form form {
-    display: flex;
-    flex-direction: column;
-}
-
-.availability-form label {
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-}
-
-.availability-form input,
-.availability-form select {
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-.checkbox-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-}
-
-.checkbox-group label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    font-size: 16px;
-    color: #555;
-}
-
-.checkbox-group input {
-    margin-right: 10px;
-}
-
-.availability-form button {
-    padding: 10px;
-    font-size: 16px;
-    color: white;
-    background: #54b4da;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.availability-form button:hover {
-    background: linear-gradient(45deg, #0056b3, #0099cc);
-}
-
-#availabilityData {
-    width: 100%;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-top: 20px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
-
 /* ==================== RESPONSIVE DESIGN ==================== */
 
 @media (max-width: 480px) {
@@ -413,13 +224,109 @@ header .current-date {
     .login-container h2 {
         font-size: 24px;
     }
+}
 
-    .calendar {
-        width: 100%;
-        padding: 10px;
-    }
+/* ==================== TUTOR CARDS STYLES ==================== */
 
-    .days {
-        grid-template-columns: repeat(7, 1fr);
-    }
+.tutor-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.tutor-card {
+    width: 100%;
+    max-width: 250px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 15px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tutor-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.tutor-card h4 {
+    font-size: 1.2rem;
+    color: #39abf7; /* Blue for names */
+    margin-bottom: 10px;
+}
+
+.tutor-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.tutor-card button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #54b4da;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tutor-card button:hover {
+    background-color: #0056b3;
+}
+
+/* ==================== HEADINGS & TEXT ==================== */
+
+/* For centering the 'Available Tutors' title */
+.data_message h3 {
+    text-align: center;
+}
+
+/* ==================== BUTTON STYLES ==================== */
+
+/* Confirm Booking Button styling */
+.confirm-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    margin: 15px 10px;
+    background: #48ca52;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.3s;
+    width: 100%;
+}
+
+/* Hover effect for the confirm button */
+.confirm-btn:hover {
+    background: linear-gradient(45deg, #2e8c19, #138f46);
+}
+
+/* Back to Tutor List Button Styling */
+.secondary-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    margin: 15px 10px;
+    background: #f85e17; /* Orange */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.secondary-btn:hover {
+    background: linear-gradient(45deg, #e04d36, #e32528);
 }

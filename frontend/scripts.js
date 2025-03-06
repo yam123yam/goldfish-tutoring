@@ -80,184 +80,7 @@ function login_post_request() {
     }
 }
 
-//----for the calendar----//
-document.addEventListener('DOMContentLoaded', function() {
-    const daysTag = document.querySelector(".days");
-    const currentDate = document.querySelector(".current-date");
-    const prevNextIcon = document.querySelectorAll(".icons span");
-    const availabilityData = document.getElementById("availabilityData");
 
-    let date = new Date();
-    let currYear = date.getFullYear();
-    let currMonth = date.getMonth();
-
-    const months = ["January", "February", "March", "April", "May", "June", "July",
-                  "August", "September", "October", "November", "December"];
-
-    let availability = {};
-    let selectedDays = [];
-
-    const renderCalendar = () => {
-        let firstDayofMonth = new Date(currYear, currMonth, 1).getDay();
-        let lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate();
-        let lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay();
-        let lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
-        let liTag = "";
-
-        for (let i = firstDayofMonth; i > 0; i--) {
-            liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
-        }
-
-        for (let i = 1; i <= lastDateofMonth; i++) {
-            let isToday = i === date.getDate() && currMonth === new Date().getMonth() 
-                         && currYear === new Date().getFullYear() ? "active" : "";
-            let isSelected = selectedDays.includes(`${currYear}-${currMonth+1}-${i}`) ? "selected" : "";
-            liTag += `<li class="${isToday} ${isSelected}" data-date="${currYear}-${currMonth+1}-${i}">${i}</li>`;
-        }
-
-        for (let i = lastDayofMonth; i < 6; i++) {
-            liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
-        }
-        currentDate.innerText = `${months[currMonth]} ${currYear}`;
-        daysTag.innerHTML = liTag;
-    };
-
-    // Initialize calendar
-    renderCalendar();
-
-    // Add event listeners to previous and next month buttons
-    prevNextIcon.forEach(icon => {
-        icon.addEventListener("click", () => {
-            currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
-
-            if(currMonth < 0 || currMonth > 11) {
-                date = new Date(currYear, currMonth, new Date().getDate());
-                currYear = date.getFullYear();
-                currMonth = date.getMonth();
-            } else {
-                date = new Date();
-            }
-            renderCalendar();
-        });
-    });
-
-    let isDragging = false;
-
-    // Add day selection functionality
-    daysTag.addEventListener("mousedown", (e) => {
-        if (e.target.tagName === "LI" && !e.target.classList.contains("inactive")) {
-            isDragging = true;
-            toggleSelection(e.target);
-        }
-    });
-
-    daysTag.addEventListener("mousemove", (e) => {
-        if (isDragging && e.target.tagName === "LI" && !e.target.classList.contains("inactive")) {
-            toggleSelection(e.target);
-        }
-    });
-
-    document.addEventListener("mouseup", () => {
-        if (isDragging) {
-            isDragging = false;
-        }
-    });
-
-    const toggleSelection = (element) => {
-        const date = element.dataset.date;
-        if (element.classList.contains("selected")) {
-            element.classList.remove("selected");
-            selectedDays = selectedDays.filter(item => item !== date);
-        } else {
-            element.classList.add("selected");
-            if (!selectedDays.includes(date)) {
-                selectedDays.push(date);
-            }
-        }
-    };
-
-    document.getElementById("availability_submit").onclick = function() {
-        const startTime = document.getElementById("startTime").value;
-        const endTime = document.getElementById("endTime").value;
-        const subjects = Array.from(document.querySelectorAll("#subjects option:checked")).map(option => option.value);
-        const username = localStorage.getItem("username");
-
-        if (selectedDays.length === 0) {
-            document.getElementById("availability_status").innerHTML = "Please select at least one day";
-            return;
-        }
-
-        if (startTime && endTime && subjects.length > 0) {
-            selectedDays.forEach(day => {
-                if (!availability[day]) {
-                    availability[day] = [];
-                }
-                availability[day].push({ start: startTime, end: endTime });
-            });
-
-            // Convert subject array to format expected by Lambda
-            const subjectsFormatted = subjects.map(subject => ({ S: subject }));
-            
-            // Convert availability object to format expected by Lambda
-            const availabilityFormatted = Object.entries(availability).map(([date, times]) => {
-                return {
-                    M: {
-                        date: { S: date },
-                        times: { 
-                            L: times.map(time => ({ 
-                                M: {
-                                    start: { S: time.start },
-                                    end: { S: time.end }
-                                }
-                            }))
-                        }
-                    }
-                };
-            });
-
-            const inputData = {
-                username: { S: username },
-                subjects: { L: subjectsFormatted },
-                availability: { L: availabilityFormatted }
-            };
-
-            document.getElementById("availability_status").innerHTML = "Saving availability...";
-
-            // Send AJAX request
-            $.ajax({
-                url: API_AVAILABILITY_ENDPOINT,
-                type: "POST",
-                data: JSON.stringify(inputData),
-                contentType: "application/json",
-                success: function(response) {
-                    let res = typeof response === "string" ? JSON.parse(response) : response;
-                    if (res.status === "success") {
-                        document.getElementById("availability_status").innerHTML = "Availability saved successfully!";
-                    } else {
-                        document.getElementById("availability_status").innerHTML = "Error: " + res.message;
-                    }
-                },
-                error: function(xhr, status, error) {
-                    document.getElementById("availability_status").innerHTML = "Error saving availability. Please try again.";
-                    console.error("Error:", xhr.responseText);
-                }
-            });
-
-            // Clear selection
-            selectedDays = [];
-            renderCalendar();
-            //displayAvailabilityData();
-        } else {
-            document.getElementById("availability_status").innerHTML = "Please fill all fields";
-        }
-    };
-
-    const displayAvailabilityData = () => {
-        availabilityData.textContent = JSON.stringify(availability, null, 2);
-    };
-});
-
-//scheduling a session 
 document.addEventListener('DOMContentLoaded', function() {
     // Get the elements
     const scheduleButton = document.getElementById('schedule_sess_btn');
@@ -291,6 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
             date: dateInput.value,
             time: timeInput.value
         };
+
+        // Display the session data being sent in JSON format
+        //dataElement.innerHTML = `Sending data to Lambda: ${JSON.stringify(sessionData, null, 2)}`;
 
         // Make the API call to AWS Lambda
         $.ajax({
@@ -344,63 +170,57 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to display the list of tutors
-    function displayTutors(tutors) {
-        if (!tutors || tutors.length === 0) {
-            statusElement.textContent = 'No tutors available for the selected criteria.';
-            return;
-        }
-
-        // Create a header for the data section
-        const header = document.createElement('h3');
-        header.textContent = 'Available Tutors:';
-        dataElement.appendChild(header);
-
-        // Create a table for the tutors
-        const table = document.createElement('table');
-        table.classList.add('tutor-table');
-        
-        // Add table header
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        ['Name', 'Email', 'Phone', 'Subjects', 'Select'].forEach(text => {
-            const th = document.createElement('th');
-            th.textContent = text;
-            headerRow.appendChild(th);
-        });
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-        
-        // Add table body with tutor data
-        const tbody = document.createElement('tbody');
-        tutors.forEach(tutor => {
-            const row = document.createElement('tr');
-            
-            // Add tutor information
-            addTableCell(row, tutor.username);
-            addTableCell(row, tutor.email);
-            addTableCell(row, tutor.phone_number || 'N/A');
-            addTableCell(row, Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : tutor.subjects);
-            
-            // Add selection button
-            const selectCell = document.createElement('td');
-            const selectButton = document.createElement('button');
-            selectButton.textContent = 'Select';
-            selectButton.classList.add('select-btn');
-            selectButton.dataset.username = tutor.username;
-            selectButton.addEventListener('click', function() {
-                selectTutor(tutor);
-            });
-            selectCell.appendChild(selectButton);
-            row.appendChild(selectCell);
-            
-            tbody.appendChild(row);
-        });
-        table.appendChild(tbody);
-        dataElement.appendChild(table);
-
-        // Display available tutors in the status element
-        statusElement.textContent = `Available Tutors: ${tutors.map(tutor => tutor.username).join(', ')}`;
+    // Function to display the list of tutors
+function displayTutors(tutors) {
+    if (!tutors || tutors.length === 0) {
+        statusElement.textContent = 'No tutors available for the selected criteria.';
+        return;
     }
+
+    // Create a header for the data section
+    const header = document.createElement('h3');
+    header.textContent = 'Available Tutors:';
+    dataElement.appendChild(header);
+
+    // Create a container for the tutor cards
+    const tutorList = document.createElement('div');
+    tutorList.classList.add('tutor-list');
+
+    tutors.forEach(tutor => {
+        const tutorCard = document.createElement('div');
+        tutorCard.classList.add('tutor-card');
+
+        // Add tutor details inside the card
+        const tutorName = document.createElement('h4');
+        tutorName.textContent = tutor.username;
+        tutorCard.appendChild(tutorName);
+
+        const tutorInfo = document.createElement('p');
+        tutorInfo.textContent = `Email: ${tutor.email}`; // | Phone: ${tutor.phone_number || 'N/A'}`;
+        tutorCard.appendChild(tutorInfo);
+
+        const tutorSubjects = document.createElement('p');
+        tutorSubjects.textContent = `Subjects: ${Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : tutor.subjects}`;
+        tutorCard.appendChild(tutorSubjects);
+
+        // Add select button
+        const selectButton = document.createElement('button');
+        selectButton.textContent = 'Select Tutor';
+        selectButton.classList.add('select-btn');
+        selectButton.dataset.username = tutor.username;
+        selectButton.addEventListener('click', function() {
+            selectTutor(tutor);
+        });
+        tutorCard.appendChild(selectButton);
+
+        tutorList.appendChild(tutorCard);
+    });
+
+    dataElement.appendChild(tutorList);
+    //statusElement.textContent = `Found ${tutors.length} available tutors.`;
+    statusElement.textContent ="";
+}
+
 
     // Helper function to add a cell to a table row
     function addTableCell(row, text) {
@@ -410,38 +230,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to handle tutor selection
-    function selectTutor(tutor) {
-        // Clear previous content
-        dataElement.innerHTML = '';
-        
-        // Create confirmation message
-        const confirmation = document.createElement('div');
-        confirmation.classList.add('confirmation');
-        
-        const message = document.createElement('p');
-        message.textContent = `You've selected ${tutor.username} for a ${subjectSelect.value} session on ${formatDate(dateInput.value)} at ${formatTimeForDisplay(timeInput.value)}.`;
-        confirmation.appendChild(message);
-        
-        // Create confirm button
-        const confirmButton = document.createElement('button');
-        confirmButton.textContent = 'Confirm Booking';
-        confirmButton.classList.add('btn');
-        confirmButton.addEventListener('click', function() {
-            confirmBooking(tutor);
-        });
-        confirmation.appendChild(confirmButton);
-        
-        // Create back button
-        const backButton = document.createElement('button');
-        backButton.textContent = 'Back to Tutor List';
-        backButton.classList.add('btn', 'secondary');
-        backButton.addEventListener('click', function() {
-            scheduleSession(); // This will re-fetch the tutor list
-        });
-        confirmation.appendChild(backButton);
-        
-        dataElement.appendChild(confirmation);
-    }
+    // Function to handle tutor selection
+function selectTutor(tutor) {
+    // Clear previous content
+    dataElement.innerHTML = '';
+    
+    // Create confirmation message
+    const confirmation = document.createElement('div');
+    confirmation.classList.add('confirmation');
+    
+    const message = document.createElement('p');
+    message.textContent = `You've selected ${tutor.username} for a ${subjectSelect.value} session on ${formatDate(dateInput.value)} at ${formatTimeForDisplay(timeInput.value)}.`;
+    confirmation.appendChild(message);
+    
+    // Create confirm button
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = 'Confirm Booking';
+    confirmButton.classList.add('btn', 'confirm-btn');
+    confirmButton.addEventListener('click', function() {
+        confirmBooking(tutor);
+    });
+    confirmation.appendChild(confirmButton);
+    
+    // Create back button
+    const backButton = document.createElement('button');
+    backButton.textContent = 'Back to Tutor List';
+    backButton.classList.add('btn', 'secondary-btn');
+    backButton.addEventListener('click', function() {
+        scheduleSession(); // This will re-fetch the tutor list
+    });
+    confirmation.appendChild(backButton);
+    
+    dataElement.appendChild(confirmation);
+}
+
 
     // Function to confirm booking
     function confirmBooking(tutor) {
@@ -453,7 +275,8 @@ document.addEventListener('DOMContentLoaded', function() {
         success.classList.add('success-message');
         
         const message = document.createElement('p');
-        message.textContent = `Your session with ${tutor.username} has been booked successfully! You will receive a confirmation email shortly.`;
+        message.classList.add('data_message');
+        message.textContent = `Your session with ${tutor.username} has been booked successfully!`;
         success.appendChild(message);
         
         dataElement.appendChild(success);
