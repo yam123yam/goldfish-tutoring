@@ -4,6 +4,8 @@ var API_LOGIN_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com
 var API_AVAILABILITY_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/update/availability";
 var API_GET_ROLE_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/users/role";
 var API_GET_TUTORS_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/session/get_tutors"
+var API_FETCH_USER_DATA_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/users/fetch_data";
+var API_UPDATE_PROFILE_ENDPOINT = "https://p5r4ervae0.execute-api.us-east-2.amazonaws.com/dev/update/profile"
 
 
 // Register user post request
@@ -537,4 +539,103 @@ function get_role() {
 function temp_json(temp_json_file) {
     let json_file = temp_json_file;
     return json_file;
+}
+
+ocument.addEventListener('DOMContentLoaded', function() {
+    const profileDetailsElement = document.getElementById('profile-details');
+    const username = localStorage.getItem('username');
+
+    if (username) {
+        fetchUserData(username).then(userData => {
+            displayUserProfile(userData);
+        }).catch(error => {
+            console.error('Error fetching user data:', error);
+        });
+
+        document.getElementById('update_button').addEventListener('click', function() {
+            saveProfile();
+        });
+    } else {
+        console.error('No username found in localStorage');
+    }
+});
+
+function fetchUserData(username) {
+    return fetch(API_FETCH_USER_DATA_ENDPOINT, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username: username })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        return JSON.parse(data.body);
+    })
+    .catch(error => {
+        throw new Error('Error fetching user data: ' + error.message);
+    });
+}
+
+function displayUserProfile(userData) {
+    const profileDetailsElement = document.getElementById('profile-details');
+    if (profileDetailsElement) {
+        profileDetailsElement.innerHTML = `
+            <p><strong>Full Name:</strong> ${userData.full_name}</p>
+            <p><strong>Email:</strong> ${userData.email}</p>
+            <p><strong>Grade:</strong> ${userData.grade}</p>
+            <p><strong>Phone Number:</strong> ${userData.phone_number}</p>
+        `;
+    } else {
+        populateEditProfileForm(userData);
+    }
+}
+
+function populateEditProfileForm(userData) {
+    document.getElementById('full_name').value = userData.full_name;
+    document.getElementById('email').value = userData.email;
+    document.getElementById('username').value = userData.username;
+    document.getElementById('grade').value = userData.grade;
+    document.getElementById('phone_number').value = userData.phone_number;
+    document.getElementById('pet_name').value = userData.pet_name;
+}
+
+function saveProfile() {
+    
+    var username = localStorage.getItem('username')
+
+    const updatedUserData = {
+        username: username,
+        full_name: document.getElementById('full_name').value,
+        email: document.getElementById('email').value,
+        grade: document.getElementById('grade').value,
+        phone_number: document.getElementById('phone_number').value,
+    };
+
+    fetch(API_UPDATE_PROFILE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedUserData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('profile_status').textContent = 'Profile updated successfully!';
+        window.location.href = "profile.html";
+    })
+    .catch(error => {
+        console.error('Error updating profile:', error);
+        document.getElementById('profile_status').textContent = 'Error updating profile';
+    });
 }

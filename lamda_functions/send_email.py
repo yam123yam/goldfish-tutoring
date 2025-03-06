@@ -1,45 +1,70 @@
-import json
 import boto3
-
-# Initialize the SES client
-ses_client = boto3.client('ses', region_name='us-east-1')  # Change region if needed
-
-SENDER_EMAIL = "your_verified_email@example.com"  # Replace with your verified sender email
+from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
+    SENDER = "jumpyyao@gmail.com" # must be verified in AWS SES Email
+    RECIPIENT = event.get('recipient') # must be verified in AWS SES Email
+
+    # If necessary, replace us-west-2 with the AWS Region you're using for Amazon SES.
+    AWS_REGION = "us-east-2"
+
+    # The subject line for the email.
+    SUBJECT = event.get('subject')
+    #SUBJECT = "This is test email for testing purpose..!!"
+
+    # The email body for recipients with non-HTML email clients.
+    BODY_TEXT = event.get('body_text')
+                
+    # The HTML body of the email.
+    BODY_HTML = """<html>
+    <head></head>
+    <body>
+    <h1>Hey Hi...</h1>
+    <p>This email was sent with
+        <a href='https://aws.amazon.com/ses/'>Amazon SES CQPOCS</a> using the
+        <a href='https://aws.amazon.com/sdk-for-python/'>
+        AWS SDK for Python (Boto)</a>.</p>
+    </body>
+    </html>
+                """            
+
+    # The character encoding for the email.
+    CHARSET = "UTF-8"
+
+    # Create a new SES resource and specify a region.
+    client = boto3.client('ses',region_name=AWS_REGION)
+
+    # Try to send the email.
     try:
-        # Debugging: Print the received event
-        print("Received event:", json.dumps(event, indent=2))
-
-        recipient_email = event.get('recipient_email')
-        subject = event.get('subject', 'Default Subject')
-        message_body = event.get('message_body', 'Default Message')
-
-        if not recipient_email:
-            return {
-                'statusCode': 400,
-                'body': json.dumps({'error': 'Recipient email is required'})
-            }
-
-        # Send email
-        response = ses_client.send_email(
-            Source=SENDER_EMAIL,
-            Destination={'ToAddresses': [recipient_email]},
+        #Provide the contents of the email.
+        response = client.send_email(
+            Destination={
+                'ToAddresses': [
+                    RECIPIENT,
+                ],
+            },
             Message={
-                'Subject': {'Data': subject},
-                'Body': {'Text': {'Data': message_body}}
-            }
+                'Body': {
+                    'Html': {
+        
+                        'Data': BODY_HTML
+                    },
+                    'Text': {
+        
+                        'Data': BODY_TEXT
+                    },
+                },
+                'Subject': {
+
+                    'Data': SUBJECT
+                },
+            },
+            Source=SENDER
         )
+    # Display an error if something goes wrong.	
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+    else:
+        print("Email sent! Message ID:"),
+        print(response['MessageId'])
 
-        print(f"Email sent to {recipient_email} with MessageId: {response['MessageId']}")
-        return {
-            'statusCode': 200,
-            'body': json.dumps({'message': 'Email sent successfully', 'SES_MessageId': response['MessageId']})
-        }
-
-    except Exception as e:
-        print(f"Failed to send email to {recipient_email}. Error: {str(e)}")
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
-        }

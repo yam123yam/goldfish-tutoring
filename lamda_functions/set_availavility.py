@@ -46,4 +46,3 @@ def lambda_handler(event, context):
 #helper function to get the current time
 def get_time():
     return datetime.now().isoformat()
-

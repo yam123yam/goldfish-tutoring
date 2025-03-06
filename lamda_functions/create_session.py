@@ -48,8 +48,7 @@ def lambda_handler(event, context):
         # Store session details in DynamoDB
         session_db.put_item(
             Item={
-                key
-                'session_id': session_id,
+                'session_UUID': session_id,
                 'tutor_id': tutor['user_id'],
                 'student_id': student['user_id'],
                 'tutor_email': tutor['email'],
@@ -62,8 +61,8 @@ def lambda_handler(event, context):
         )
 
         # Send email to both tutor and student
-        send_email(tutor['email'], f"Session Created with {student['username']}", f"A session has been created with {student['username']} on {date} at {time}.")
-        send_email(student['email'], f"Session Created with {tutor['username']}", f"A session has been created with {tutor['username']} on {date} at {time}.")
+        #send_email(tutor['email'], f"Session Created with {student['username']}", f"A session has been created with {student['username']} on {date} at {time}.")
+        #send_email(student['email'], f"Session Created with {tutor['username']}", f"A session has been created with {tutor['username']} on {date} at {time}.")
 
         return {"statusCode": 200, "body": json.dumps({"status": "success", "message": "Session created successfully"})}
 

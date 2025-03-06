@@ -23,4 +23,3 @@ def get_user_by_username(username):
         KeyConditionExpression=Key('username').eq(username)
     )
     return response['Items'][0] if response['Items'] else None
-#ignore
