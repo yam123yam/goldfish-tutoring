@@ -1,0 +1,74 @@
+# ---- Python ----
+# Virtual environment
+venv/
+.venv/
+.env
+
+# Compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ---- Dependencies ----
+*.egg-info/
+dist/
+build/
+
+# ---- Logs & Debugging ----
+logs/
+*.log
+*.out
+*.err
+
+# ---- Database ----
+*.sqlite3
+*.db
+
+# ---- AWS (if using AWS CLI locally) ----
+.aws/
+*.pem  # Private keys
+config.json  # Any AWS-related config files
+
+# ---- VS Code / IDE Files ----
+.vscode/
+.idea/
+*.swp
+
+# ---- Jupyter Notebook Checkpoints ----
+.ipynb_checkpoints/
+
+# ---- System Files ----
+.DS_Store
+Thumbs.db
+
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
