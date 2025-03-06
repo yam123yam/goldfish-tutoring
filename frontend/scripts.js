@@ -504,7 +504,7 @@ function redirect_to_login() {
 }
 
 function redirect_to_home() {
-    window.location.href = "home.html";
+    window.location.href = "index.html";
 }
 
 function redirect_to_student_home() {
@@ -541,7 +541,7 @@ function temp_json(temp_json_file) {
     return json_file;
 }
 
-ocument.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const profileDetailsElement = document.getElementById('profile-details');
     const username = localStorage.getItem('username');
 
